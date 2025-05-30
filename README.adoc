@@ -1,0 +1,181 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/b74Fzo1b)
+= Jeu de cartes Zheng Fen
+
+.Composition du groupe (à compléter)
+--
+* Abi, Mohamed, 22408077, uvsq22408077
+* BOUAGADA, Youcef, 22407770, uvsq22407770
+* NOUMI, Mahdi, 22404628, uvsq22404628
+* SRAIRI, Aissa Wail, 22406233, uvsq24406233
+--
+
+L'objet de ce mini-projet est de développer le jeu de carte https://boardgamegeek.com/boardgame/70451/zheng-fen[zheng-fen] qui doit fonctionner en mode ligne de commande.
+La règle du jeu est disponible dans la https://boardgamegeek.com/filepage/205610/regles-en-francais-plus-aide-de-jeu[section _Files_] du site précédent.
+Cette dernière est une traduction française de la page https://www.pagat.com/climbing/zhengfen.html[Zheng Fen (挣分)].
+Ce jeu comporte de nombreuses variantes (https://www.pagat.com/climbing/doudizhu.html[Dou Dizhu (斗地主)], https://boardgamegeek.com/boardgame/215/tichu[Tichu]).
+
+[IMPORTANT]
+====
+* **L'objectif de ce projet est de travailler la conception objet**. Donc, plus que les fonctionnalités, vous prêterez une attention particulière aux choix de conception qui devront être argumentés.
+* Vous devrez respecter les contraintes techniques et fonctionnelles mentionnées ci-dessous.
+* L'usage de bibliothèques tierces est autorisé.
+* Ce qui n'est pas imposé par le sujet est laissé à votre libre interprétation.
+====
+
+== Contraintes techniques
+* Ce mini-projet est à réaliser en Java par groupe de 4 étudiants (3 ou 5 possibles avec accord de l'enseignant).
+  - les étudiants doivent coopérer à travers un même git (celui créé par _github classroom_).
+  Les contributions des participants (_commits_) doivent être équilibrées.
+* Il devra comporter une documentation dans ce fichier (cf. ci-dessous).
+  - La documentation devra décrire l'usage de l'application (_manuel utilisateur_) ainsi que la conception du jeu (_manuel technique_).
+    En particulier, les choix de conception devront être documentés.
+* Vous utiliserez `git` en effectuant des commits réguliers décrits par des messages informatifs.
+L'usage des branches est également exigé, attestant ainsi de votre collaboration au sein du groupe.
+La version finale de votre projet devra se trouver dans la branche `main`.
+* La version de Java à utiliser est la https://adoptium.net/[version 17] (ou plus récente).
+* Le _build_ sera assuré par _Maven_ et plus précisément _Maven wrapper_ (déjà intégré dans le projet).
+Aucune manipulation en dehors de Maven ne devra être nécessaire pour la compilation.
+* Le projet devra respecter les règles de codage Google (vérification par `checkstyle` déjà intégré dans le projet).
+* Des tests unitaires https://junit.org/junit5/docs/current/user-guide/[JUnit 5] devront être disponibles pour une part significative des méthodes développées.
+* Un outil de https://fr.wikipedia.org/wiki/Couverture_de_code[_Code Coverage_] devra être intégré au _build_
+* Les fonctionnalités du langage Java devront être utilisées au mieux (POO, exceptions, librairie de collections, I/O, …).
+* L'application devra pouvoir être exécutée à partir d'un `jar` incluant toutes les dépendances.
+* L'application fonctionnera dans un terminal (pas d'interface graphique).
+
+== Description fonctionnelle
+L'application doit permettre de jouer de 0 à 4 joueurs humains, i.e. de zéro à quatre adversaires virtuels dénommés dans la suite _Joueurs Virtuels_ (**JV**).
+Chaque JV joue grace à un _Moteur de Jeu_ (**MJ**) modélisé par une classe de votre programme.
+Un MJ peut appliquer une stratégie basique, ou bien jouer à l'aide de stratégies plus sophistiquées.
+Bien entendu, l'application doit gérer l'enchaînement des manches{empty}footnote:[Une manche se termine quand il ne reste des cartes qu'à un seul joueur (cf. la règle du jeu).] et les décomptes des points jusqu'à la fin du jeu{empty}footnote:[Le jeu se termine lorsqu'un joueur atteint ou dépasse un certain nombre de points (500 en général).].
+
+=== Interface de l'application
+L'interface textuelle devra
+
+* visualiser les actions de chaque joueur par des messages textuels clairs et concis (par exemple, "JV1: 🂮, 🂾, 🃎, 🃈, 🃘" ou "JV1: K(SHD), 8(DC)").
+  - où les valeurs et les couleurs des cartes sont données par leurs initiales en anglais (**K**ing = roi, **Q**ueen = dame, **J**ack = valet, **S**pade = pique, **H**eart = cœur, **D**iamond = carreau et **C**lub = trèfle).
+* afficher chaque joueur et ses messages dans une couleur distincte.
+* valider les saisies des joueurs humains
+  - pour saisir une combinaison, le joueur utilisera une syntaxe du type `<Valeur>(<couleur1><couleur2>)` (par exemple "K(SHD), Q(DC)").
+* afficher le nombre de cartes de chaque joueur, mais pas les valeurs de ses cartes (sauf en mode débogage).
+* toujours afficher les cartes ordonnées du plus fort au plus faible et pique (_Spade_) avant cœur (_Heart_) avant carreau (_Diamond_) avant trèfle (_Club_).
+* afficher un message clair pour les actions effectuées par l'application.
+
+=== Contraintes à respecter
+* Un joueur peu décider d'abandonner. 
+C'est un événement rare (surtout chez les JV), mais possible.
+* L'historique d'une partie sera mémorisée dans une collection stockée dans un fichier.
+  - il sera donc possible de rejouer une partie ou d'afficher le déroulé d'une partie
+* Vous devez implémenter un MJ appliquant une stratégie triviale.
+Le MJ se débarrasse de ses cartes au fur et à mesure sans aucun assemblage.
+* Vous devez également implémenter au moins un MJ qui joue de manière plus sophistiquée.
+* Un mode débogage permettra de jouer à jeux ouverts.
+* Le MJ associé à chaque JV doit pouvoir être modifié.
+* Une interface de configuration permettra de modifier les paramètres du jeu (variantes, nombre de points pour gagner, MJ à utiliser, …)
+
+== Références
+* https://github.com/lyudaio/jcards[jCards] - A Lightweight Java Library for manipulating Playing Cards
+* http://fusesource.github.io/jansi/[JAnsi] - Gestion des couleur dans un terminal
+* https://github.com/jline/jline3[JLine] - Gestion des saisies
+
+## Manuel utilisateur (à compléter)
+
+### Configurer et démarrer une partie
+1. **Configuration** :
+   - Saisir le nombre de joueurs (entre 2 et 4).
+   - Fournir le nom et la couleur du joueur principal.
+   - Activer ou désactiver le mode espionnage.
+2. **Démarrage** :
+   - Lancer la commande `InitialiserLeJeuCommande` pour créer une instance de la partie.
+   - La partie démarre avec la méthode `GameRoundManager.demarrer()`.
+
+### Syntaxe pour jouer une combinaison de cartes
+- **Jouer une combinaison** : `combo <index>`  
+  Exemple : `combo 1`
+- **Jouer des cartes spécifiques** : `carte <indices>`  
+  Exemple : `carte 1,2,3`
+- **Passer son tour** : `passe`
+
+### Autres actions disponibles
+- **Espionner** : `espionner` (si le mode espionnage est activé).
+- **Quitter la partie** : `quitter`.
+
+### Stratégies des MJ
+- **MoteurBasique** : Joue la combinaison valide la plus faible qui bat la dernière combinaison jouée.
+- **MoteurSophistique** : Analyse toutes les combinaisons valides et choisit la meilleure en fonction du contexte.
+
+### Évolutions possibles
+- Ajouter des stratégies avancées pour les MJ, comme une stratégie basée sur l'anticipation des coups adverses.
+- Intégrer un mode multijoueur en ligne.
+- Ajouter une interface graphique pour améliorer l'expérience utilisateur.
+- Enregistrer des statistiques de jeu (victoires, combinaisons jouées, etc.).
+
+== Manuel technique
+
+=== Compiler le projet
+
+.Sous Linux
+----
+$ JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64/ ./mvnw package
+----
+
+.Sous Windows
+----
+> mvn clean package
+----
+
+=== Exécuter l'application
+----
+$ java -jar target/zhengfen-1.0.jar
+----
+
+=== Consulter le rapport de couverture de code
+1. Exécuter les tests :
+----
+> mvn test
+----
+2. Générer le rapport :
+----
+> mvn jacoco:report
+----
+3. Ouvrir le fichier HTML dans le dossier `target/site/jacoco`.
+
+=== Bibliothèques utilisées
+- **JUnit** : Tests unitaires.
+- **Mockito** : Objets simulés.
+- **JaCoCo** : Couverture de code.
+- **Jansi** : Texte coloré dans la console.
+- **Maven** : Gestion des dépendances.
+
+=== Rôle des différentes classes
+- **Partie** : Gère les informations globales de la partie.
+- **GameRoundManager** : Gère les tours de jeu.
+- **JoueurHumain** et **JoueurVirtuel** : Représentent les joueurs humains et virtuels.
+- **MoteurBasique** et **MoteurSophistique** : Implémentent les stratégies des MJ.
+- **GenerateurCombinaisons** : Génère les combinaisons possibles à partir d'une main.
+- **ValidationStrategyFactory** : Valide les combinaisons en utilisant différentes stratégies.
+
+=== Choix de conception
+- **Factory Pattern** : Gestion des stratégies de validation.
+- **Builder Pattern** : Construction des objets `Carte` et `Joueur`.
+- **Open/Closed Principle** : Ajout de nouvelles règles sans modifier le code existant.
+- **Command Pattern** : Initialisation de la partie via des commandes spécifiques.
+
+=== Traitement des commandes utilisateur
+1. **Saisie** : L'utilisateur entre une commande (ex. : `combo 1`).
+2. **Analyse** : La commande est analysée pour déterminer l'action à effectuer.
+3. **Exécution** : L'action correspondante est exécutée.
+
+.Exemple
+----
+Commande : `carte 1,2,3`  
+- Les indices sont extraits et validés avant de jouer les cartes.
+----
+
+=== Améliorations possibles
+- Ajouter des tests pour couvrir les cas limites.
+- Optimiser les algorithmes de génération et de validation des combinaisons.
+- Ajouter des logs pour faciliter le débogage.
+- Intégrer un système de sauvegarde/restauration des parties.
+
+
+--
