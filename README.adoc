@@ -3,10 +3,10 @@
 
 .Composition du groupe (à compléter)
 --
-* Abi, Mohamed, 22408077, uvsq22408077
-* BOUAGADA, Youcef, 22407770, uvsq22407770
-* NOUMI, Mahdi, 22404628, uvsq22404628
-* SRAIRI, Aissa Wail, 22406233, uvsq24406233
+* Abi, Mohamed, ******, uvsq22408077
+* BOUAGADA, Youcef, ******, 
+* NOUMI, Mahdi, ******, ******
+* SRAIRI, Aissa Wail, *******, ******
 --
 
 L'objet de ce mini-projet est de développer le jeu de carte https://boardgamegeek.com/boardgame/70451/zheng-fen[zheng-fen] qui doit fonctionner en mode ligne de commande.
@@ -155,10 +155,12 @@ $ java -jar target/zhengfen-1.0.jar
 - **ValidationStrategyFactory** : Valide les combinaisons en utilisant différentes stratégies.
 
 === Choix de conception
+- **SOLID PRINCIPLES : SRP,OCP,DIP,ISP,LSP
 - **Factory Pattern** : Gestion des stratégies de validation.
 - **Builder Pattern** : Construction des objets `Carte` et `Joueur`.
 - **Open/Closed Principle** : Ajout de nouvelles règles sans modifier le code existant.
 - **Command Pattern** : Initialisation de la partie via des commandes spécifiques.
+- **Strategy Pattern** 
 
 === Traitement des commandes utilisateur
 1. **Saisie** : L'utilisateur entre une commande (ex. : `combo 1`).
@@ -167,15 +169,9 @@ $ java -jar target/zhengfen-1.0.jar
 
 .Exemple
 ----
-Commande : `carte 1,2,3`  
+Commande : `carte 1`  
 - Les indices sont extraits et validés avant de jouer les cartes.
 ----
-
-=== Améliorations possibles
-- Ajouter des tests pour couvrir les cas limites.
-- Optimiser les algorithmes de génération et de validation des combinaisons.
-- Ajouter des logs pour faciliter le débogage.
-- Intégrer un système de sauvegarde/restauration des parties.
 
 
 --
